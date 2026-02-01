@@ -7,7 +7,7 @@ import { revalidatePath } from "next/cache";
 export async function getAppointments(start: Date, end: Date) {
   const user = await getCurrentUser();
 
-  return db.appointment.findMany({
+  const appointments = await db.appointment.findMany({
     where: {
       tenantId: user.tenantId,
       startDateTime: {
@@ -22,6 +22,10 @@ export async function getAppointments(start: Date, end: Date) {
       startDateTime: 'asc'
     }
   });
+  return appointments.map(apt=>({
+    ...apt,
+    price:apt.price.toNumber()
+  }))
 }
 
 export type CreateAppointmentData = {
