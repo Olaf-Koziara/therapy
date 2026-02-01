@@ -1,19 +1,12 @@
 "use client"
 
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { format } from "date-fns";
-import { pl } from "date-fns/locale";
-import { deleteAppointment, updateAppointment } from "@/app/actions/calendar";
 import { useState, useTransition } from "react";
+import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { deleteAppointment, updateAppointment } from "@/app/actions/calendar";
+import { format } from "date-fns";
 
 type Appointment = {
     id: string;
@@ -24,134 +17,113 @@ type Appointment = {
         lastName: string;
     };
     type: string;
-    price: number; // Decimal in DB, but treated as number in JS often (or string/object depending on Prisma)
+    price: any; // Decimal from Prisma
 };
 
 interface AppointmentDetailsDialogProps {
     appointment: Appointment | null;
     open: boolean;
-    onClose: () => void;
+    onOpenChange: (open: boolean) => void;
 }
 
-export function AppointmentDetailsDialog({ appointment, open, onClose }: AppointmentDetailsDialogProps) {
-    const [isPending, startTransition] = useTransition();
+export function AppointmentDetailsDialog({ appointment, open, onOpenChange }: AppointmentDetailsDialogProps) {
     const [isEditing, setIsEditing] = useState(false);
-    const [editData, setEditData] = useState<{ date: string, time: string, duration: string }>({ date: "", time: "", duration: "" });
+    const [isPending, startTransition] = useTransition();
+
+    // Edit state
+    const [startTime, setStartTime] = useState("");
+    const [duration, setDuration] = useState("60");
 
     if (!appointment) return null;
 
-    // Reset edit state when opening
-    if (open && !isEditing && !editData.date && appointment) {
-       // We don't want to reset if we are already editing.
-       // Ideally use useEffect or a wrapper.
-       // For KISS, let's just initialize when entering edit mode.
-    }
-
-    const handleDelete = () => {
-        if (!confirm("Czy na pewno chcesz usunąć wizytę?")) return;
-
-        startTransition(async () => {
-            const res = await deleteAppointment(appointment.id);
-            if (res.success) {
-                onClose();
-            } else {
-                alert(res.error);
-            }
-        });
-    };
-
-    const startEdit = () => {
-        setEditData({
-            date: format(appointment.startDateTime, 'yyyy-MM-dd'),
-            time: format(appointment.startDateTime, 'HH:mm'),
-            duration: String((appointment.endDateTime.getTime() - appointment.startDateTime.getTime()) / 60000)
-        });
+    const handleEditClick = () => {
+        setStartTime(format(new Date(appointment.startDateTime), "HH:mm"));
+        const diff = (new Date(appointment.endDateTime).getTime() - new Date(appointment.startDateTime).getTime()) / 60000;
+        setDuration(diff.toString());
         setIsEditing(true);
     };
 
     const handleSave = () => {
-        const startDateTime = new Date(`${editData.date}T${editData.time}`);
-        const endDateTime = new Date(startDateTime.getTime() + parseInt(editData.duration) * 60000);
+        const dateStr = format(new Date(appointment.startDateTime), "yyyy-MM-dd");
+        const start = new Date(`${dateStr}T${startTime}`);
+        const end = new Date(start.getTime() + parseInt(duration) * 60000);
 
         startTransition(async () => {
             const res = await updateAppointment(appointment.id, {
-                startDateTime,
-                endDateTime
+                startDateTime: start,
+                endDateTime: end
             });
             if (res.success) {
                 setIsEditing(false);
-                onClose();
+                onOpenChange(false);
             } else {
                 alert(res.error);
             }
         });
     };
 
+    const handleDelete = () => {
+        if (!confirm("Czy na pewno chcesz usunąć tę wizytę?")) return;
+        startTransition(async () => {
+            await deleteAppointment(appointment.id);
+            onOpenChange(false);
+        });
+    };
+
     return (
-        <Dialog open={open} onOpenChange={(v) => !v && onClose()}>
+        <Dialog open={open} onOpenChange={(v) => {
+            if (!v) setIsEditing(false);
+            onOpenChange(v);
+        }}>
             <DialogContent>
                 <DialogHeader>
                     <DialogTitle>{isEditing ? "Edytuj wizytę" : "Szczegóły wizyty"}</DialogTitle>
                 </DialogHeader>
 
-                {isEditing ? (
-                    <div className="space-y-4">
-                         <div className="grid grid-cols-2 gap-4">
-                            <div>
-                                <Label>Data</Label>
-                                <Input
-                                    type="date"
-                                    value={editData.date}
-                                    onChange={e => setEditData({...editData, date: e.target.value})}
-                                />
-                            </div>
-                            <div>
+                <div className="space-y-4">
+                    <div>
+                        <Label>Pacjent</Label>
+                        <div className="font-medium">{appointment.patient.firstName} {appointment.patient.lastName}</div>
+                    </div>
+
+                    {isEditing ? (
+                        <>
+                             <div>
                                 <Label>Godzina</Label>
-                                <Input
-                                    type="time"
-                                    value={editData.time}
-                                    onChange={e => setEditData({...editData, time: e.target.value})}
-                                />
+                                <Input type="time" value={startTime} onChange={e => setStartTime(e.target.value)} />
                             </div>
-                        </div>
-                        <div>
-                            <Label>Czas trwania (min)</Label>
-                            <Input
-                                type="number"
-                                value={editData.duration}
-                                onChange={e => setEditData({...editData, duration: e.target.value})}
-                            />
-                        </div>
-                        <div className="flex gap-2 justify-end mt-4">
+                            <div>
+                                <Label>Czas trwania (min)</Label>
+                                <Input type="number" value={duration} onChange={e => setDuration(e.target.value)} />
+                            </div>
+                        </>
+                    ) : (
+                        <>
+                            <div>
+                                <Label>Termin</Label>
+                                <div>{format(new Date(appointment.startDateTime), "yyyy-MM-dd HH:mm")} - {format(new Date(appointment.endDateTime), "HH:mm")}</div>
+                            </div>
+                             <div>
+                                <Label>Typ</Label>
+                                <div>{appointment.type}</div>
+                            </div>
+                        </>
+                    )}
+                </div>
+
+                <DialogFooter>
+                    {isEditing ? (
+                        <>
                             <Button variant="outline" onClick={() => setIsEditing(false)}>Anuluj</Button>
                             <Button onClick={handleSave} disabled={isPending}>Zapisz</Button>
-                        </div>
-                    </div>
-                ) : (
-                    <div className="space-y-4">
-                        <div className="grid grid-cols-2 gap-2 text-sm">
-                            <div className="font-semibold text-slate-500">Pacjent:</div>
-                            <div>{appointment.patient.lastName} {appointment.patient.firstName}</div>
-
-                            <div className="font-semibold text-slate-500">Data:</div>
-                            <div>{format(appointment.startDateTime, 'dd MMMM yyyy', { locale: pl })}</div>
-
-                            <div className="font-semibold text-slate-500">Godzina:</div>
-                            <div>{format(appointment.startDateTime, 'HH:mm')} - {format(appointment.endDateTime, 'HH:mm')}</div>
-
-                            <div className="font-semibold text-slate-500">Typ:</div>
-                            <div>{appointment.type}</div>
-
-                            <div className="font-semibold text-slate-500">Cena:</div>
-                            <div>{Number(appointment.price).toFixed(2)} PLN</div>
-                        </div>
-
-                        <div className="flex gap-2 justify-end mt-6">
+                        </>
+                    ) : (
+                        <>
                             <Button variant="destructive" onClick={handleDelete} disabled={isPending}>Usuń</Button>
-                            <Button variant="outline" onClick={startEdit}>Edytuj</Button>
-                        </div>
-                    </div>
-                )}
+                            <Button onClick={handleEditClick}>Edytuj</Button>
+                        </>
+                    )}
+                </DialogFooter>
             </DialogContent>
         </Dialog>
     );
