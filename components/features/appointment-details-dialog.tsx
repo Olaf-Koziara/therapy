@@ -1,23 +1,29 @@
 "use client"
 
-import { useState, useTransition } from "react";
+import { useState, useTransition, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { deleteAppointment, updateAppointment } from "@/app/actions/calendar";
 import { format } from "date-fns";
+import { NoteEditor } from "@/components/features/note-editor";
 
 type Appointment = {
     id: string;
     startDateTime: Date;
     endDateTime: Date;
     patient: {
+        id: string;
         firstName: string;
         lastName: string;
     };
     type: string;
-    price: any; // Decimal from Prisma
+    price: any;
+    note?: {
+        id: string;
+        content: string;
+    } | null;
 };
 
 interface AppointmentDetailsDialogProps {
@@ -28,11 +34,19 @@ interface AppointmentDetailsDialogProps {
 
 export function AppointmentDetailsDialog({ appointment, open, onOpenChange }: AppointmentDetailsDialogProps) {
     const [isEditing, setIsEditing] = useState(false);
+    const [isEditingNote, setIsEditingNote] = useState(false);
     const [isPending, startTransition] = useTransition();
 
     // Edit state
     const [startTime, setStartTime] = useState("");
     const [duration, setDuration] = useState("60");
+
+    useEffect(() => {
+        if (open) {
+            setIsEditing(false);
+            setIsEditingNote(false);
+        }
+    }, [open]);
 
     if (!appointment) return null;
 
@@ -72,10 +86,13 @@ export function AppointmentDetailsDialog({ appointment, open, onOpenChange }: Ap
 
     return (
         <Dialog open={open} onOpenChange={(v) => {
-            if (!v) setIsEditing(false);
+            if (!v) {
+                setIsEditing(false);
+                setIsEditingNote(false);
+            }
             onOpenChange(v);
         }}>
-            <DialogContent>
+            <DialogContent className="max-w-md max-h-[90vh] overflow-y-auto">
                 <DialogHeader>
                     <DialogTitle>{isEditing ? "Edytuj wizytę" : "Szczegóły wizyty"}</DialogTitle>
                 </DialogHeader>
@@ -109,6 +126,36 @@ export function AppointmentDetailsDialog({ appointment, open, onOpenChange }: Ap
                             </div>
                         </>
                     )}
+
+                    <div className="h-px bg-slate-200 my-4" />
+
+                    <div>
+                        <h3 className="font-medium mb-2 text-sm text-slate-900">Notatka wizyty</h3>
+                        {appointment.note && !isEditingNote ? (
+                             <div className="bg-slate-50 p-3 rounded text-sm relative group border">
+                                <p className="whitespace-pre-wrap">{appointment.note.content}</p>
+                                <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 h-6 text-xs"
+                                    onClick={() => setIsEditingNote(true)}
+                                >
+                                    Edytuj
+                                </Button>
+                            </div>
+                        ) : (
+                            <NoteEditor
+                                noteId={appointment.note?.id}
+                                initialContent={appointment.note?.content}
+                                patientId={appointment.patient.id}
+                                appointmentId={appointment.id}
+                                placeholder="Dodaj notatkę do tej wizyty..."
+                                onSaved={() => {
+                                    onOpenChange(false); // Close dialog to refresh data
+                                }}
+                             />
+                        )}
+                    </div>
                 </div>
 
                 <DialogFooter>
@@ -119,8 +166,8 @@ export function AppointmentDetailsDialog({ appointment, open, onOpenChange }: Ap
                         </>
                     ) : (
                         <>
-                            <Button variant="destructive" onClick={handleDelete} disabled={isPending}>Usuń</Button>
-                            <Button onClick={handleEditClick}>Edytuj</Button>
+                            <Button variant="destructive" onClick={handleDelete} disabled={isPending}>Usuń wizytę</Button>
+                            <Button onClick={handleEditClick}>Edytuj wizytę</Button>
                         </>
                     )}
                 </DialogFooter>

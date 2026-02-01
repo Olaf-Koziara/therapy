@@ -11,10 +11,16 @@ type Appointment = {
     startDateTime: Date;
     endDateTime: Date;
     patient: {
+        id: string;
         firstName: string;
         lastName: string;
     };
     type: string;
+    price: any;
+    note?: {
+        id: string;
+        content: string;
+    } | null;
 };
 
 interface WeekViewProps {

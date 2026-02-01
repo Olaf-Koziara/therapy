@@ -3,6 +3,7 @@
 import db from "@/lib/db";
 import { getCurrentUser } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
+import { decrypt } from "@/lib/encryption";
 
 export async function getAppointments(start: Date, end: Date) {
   const user = await getCurrentUser();
@@ -16,16 +17,36 @@ export async function getAppointments(start: Date, end: Date) {
       }
     },
     include: {
-      patient: true
+      patient: true,
+      note: true
     },
     orderBy: {
       startDateTime: 'asc'
     }
   });
-  return appointments.map(apt=>({
-    ...apt,
-    price:apt.price.toNumber()
-  }))
+
+  return appointments.map(app => {
+      let decryptedNote = null;
+      if (app.note) {
+          try {
+              decryptedNote = {
+                  ...app.note,
+                  content: decrypt(app.note.content)
+              };
+          } catch (e) {
+              console.error(`Failed to decrypt note for appointment ${app.id}`, e);
+              decryptedNote = {
+                  ...app.note,
+                  content: "[Błąd deszyfrowania]"
+              };
+          }
+      }
+
+      return {
+          ...app,
+          note: decryptedNote
+      };
+  });
 }
 
 export type CreateAppointmentData = {

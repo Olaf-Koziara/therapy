@@ -1,8 +1,11 @@
 import { getPatientById } from "@/app/actions/patients";
+import { getPatientNotes } from "@/app/actions/notes";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { NoteList } from "@/components/features/note-list";
+import { NoteEditor } from "@/components/features/note-editor";
 
 export default async function PatientPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -11,6 +14,8 @@ export default async function PatientPage({ params }: { params: Promise<{ id: st
   if (!patient) {
     notFound();
   }
+
+  const notes = await getPatientNotes(id);
 
   return (
     <div className="space-y-6">
@@ -55,13 +60,20 @@ export default async function PatientPage({ params }: { params: Promise<{ id: st
         </Card>
       </div>
 
-      {/* Module C placeholder */}
       <Card>
         <CardHeader>
             <CardTitle>Dokumentacja Medyczna (Szyfrowana)</CardTitle>
         </CardHeader>
-        <CardContent>
-             <p className="text-muted-foreground text-sm">Moduł notatek w przygotowaniu...</p>
+        <CardContent className="space-y-8">
+             <div className="space-y-4">
+                <h3 className="text-lg font-medium">Nowa notatka</h3>
+                <NoteEditor patientId={id} />
+             </div>
+
+             <div className="space-y-4">
+                <h3 className="text-lg font-medium">Historia notatek</h3>
+                <NoteList notes={notes} />
+             </div>
         </CardContent>
       </Card>
     </div>
