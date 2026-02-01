@@ -78,6 +78,68 @@ export async function createAppointment(data: CreateAppointmentData) {
     return { success: true, appointment };
   } catch (error) {
     console.error("Create Appointment Error:", error);
-    return { success: false, error: "Błąd bazy danych przy tworzeniu wizyty." };
+    return { success: false, error: "Błąd bazy danych przy tworzeniu wizyty: " + (error as Error).message };
   }
+}
+
+export async function updateAppointment(id: string, data: Partial<CreateAppointmentData>) {
+    const user = await getCurrentUser();
+
+    // Check ownership
+    const existing = await db.appointment.findUnique({
+        where: { id }
+    });
+
+    if (!existing || existing.tenantId !== user.tenantId) {
+        return { success: false, error: "Nie znaleziono wizyty" };
+    }
+
+    // If updating time, check conflicts
+    if (data.startDateTime && data.endDateTime) {
+         const conflicts = await db.appointment.findMany({
+            where: {
+                tenantId: user.tenantId,
+                id: { not: id }, // Exclude self
+                OR: [
+                    {
+                        startDateTime: { lt: data.endDateTime },
+                        endDateTime: { gt: data.startDateTime }
+                    }
+                ]
+            }
+        });
+        if (conflicts.length > 0) {
+            return { success: false, error: "Konflikt terminów!" };
+        }
+    }
+
+    try {
+        await db.appointment.update({
+            where: { id },
+            data: {
+                ...data
+            }
+        });
+        revalidatePath('/dashboard/calendar');
+        return { success: true };
+    } catch (e) {
+        return { success: false, error: (e as Error).message };
+    }
+}
+
+export async function deleteAppointment(id: string) {
+    const user = await getCurrentUser();
+
+    const existing = await db.appointment.findUnique({ where: { id } });
+    if (!existing || existing.tenantId !== user.tenantId) {
+        return { success: false, error: "Brak dostępu" };
+    }
+
+    try {
+        await db.appointment.delete({ where: { id } });
+        revalidatePath('/dashboard/calendar');
+        return { success: true };
+    } catch (e) {
+        return { success: false, error: (e as Error).message };
+    }
 }

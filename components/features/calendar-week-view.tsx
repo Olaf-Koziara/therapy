@@ -1,6 +1,10 @@
+"use client"
+
+import { useState } from "react";
 import { startOfWeek, endOfWeek, eachDayOfInterval, format, addDays, isSameDay } from "date-fns";
 import { pl } from "date-fns/locale";
 import { cn } from "@/lib/utils";
+import { AppointmentDetailsDialog } from "./appointment-details-dialog";
 
 type Appointment = {
     id: string;
@@ -18,7 +22,16 @@ interface WeekViewProps {
     appointments: Appointment[];
 }
 
-export function WeekView({ date, appointments }: WeekViewProps) {
+export function WeekView({ date, appointments: rawAppointments }: WeekViewProps) {
+    const [selectedAppointment, setSelectedAppointment] = useState<Appointment | null>(null);
+
+    // Ensure dates are Date objects (handling serialization)
+    const appointments = rawAppointments.map(app => ({
+        ...app,
+        startDateTime: new Date(app.startDateTime),
+        endDateTime: new Date(app.endDateTime)
+    }));
+
     const start = startOfWeek(date, { locale: pl, weekStartsOn: 1 });
     const end = endOfWeek(date, { locale: pl, weekStartsOn: 1 });
     const days = eachDayOfInterval({ start, end });
@@ -28,6 +41,11 @@ export function WeekView({ date, appointments }: WeekViewProps) {
 
     return (
         <div className="border rounded-md overflow-hidden bg-white shadow-sm">
+            <AppointmentDetailsDialog
+                appointment={selectedAppointment}
+                open={!!selectedAppointment}
+                onOpenChange={(open) => !open && setSelectedAppointment(null)}
+            />
             {/* Header: Days */}
             <div className="grid grid-cols-8 border-b bg-slate-50">
                 <div className="p-4 border-r text-center font-medium text-slate-500">Godz</div>
@@ -63,6 +81,7 @@ export function WeekView({ date, appointments }: WeekViewProps) {
                                     {dayApps.map(app => (
                                         <div
                                             key={app.id}
+                                            onClick={() => setSelectedAppointment(app)}
                                             className="bg-blue-100 text-blue-700 text-xs p-1 rounded mb-1 border-l-2 border-blue-500 truncate cursor-pointer hover:bg-blue-200"
                                             title={`${format(app.startDateTime, 'HH:mm')} - ${app.patient.lastName}`}
                                         >
