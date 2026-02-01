@@ -1,0 +1,92 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Tenant {
+  id            String   @id @default(uuid())
+  name          String
+  subscription  String   @default("FREE") // FREE, PRO
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  users         User[]
+  patients      Patient[]
+  settings      Settings?
+  appointments  Appointment[]
+}
+
+model User {
+  id            String   @id @default(uuid())
+  tenantId      String
+  clerkId       String   @unique
+  email         String   @unique
+  role          String   @default("OWNER") // OWNER, ASSISTANT
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  tenant        Tenant   @relation(fields: [tenantId], references: [id])
+}
+
+model Patient {
+  id            String   @id @default(uuid())
+  tenantId      String
+  firstName     String
+  lastName      String
+  phone         String
+  email         String?
+  guardianName  String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  tenant        Tenant   @relation(fields: [tenantId], references: [id])
+  appointments  Appointment[]
+}
+
+model Appointment {
+  id            String   @id @default(uuid())
+  tenantId      String
+  patientId     String
+  startDateTime DateTime
+  endDateTime   DateTime
+  status        String   // SCHEDULED, COMPLETED, CANCELLED, NO_SHOW
+  type          String   // CONSULTATION, THERAPY
+  price         Decimal
+  isPaid        Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  tenant        Tenant   @relation(fields: [tenantId], references: [id])
+  patient       Patient  @relation(fields: [patientId], references: [id])
+  note          Note?
+}
+
+model Note {
+  id            String   @id @default(uuid())
+  appointmentId String   @unique
+  content       String   // Encrypted
+  version       Int      @default(1)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  appointment   Appointment @relation(fields: [appointmentId], references: [id])
+}
+
+model Settings {
+  id            String   @id @default(uuid())
+  tenantId      String   @unique
+  companyName   String?
+  nip           String?
+  address       String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  tenant        Tenant   @relation(fields: [tenantId], references: [id])
+}
