@@ -77,3 +77,65 @@ export async function createAppointment(data: CreateAppointmentData) {
     return { success: false, error: "Błąd bazy danych przy tworzeniu wizyty." };
   }
 }
+
+export async function deleteAppointment(id: string) {
+    const user = await getCurrentUser();
+    try {
+        await db.appointment.delete({
+            where: {
+                id,
+                tenantId: user.tenantId // Security check
+            }
+        });
+        revalidatePath('/dashboard/calendar');
+        return { success: true };
+    } catch (error) {
+        console.error("Delete Appointment Error:", error);
+        return { success: false, error: "Nie udało się usunąć wizyty." };
+    }
+}
+
+export async function updateAppointment(id: string, data: Partial<CreateAppointmentData>) {
+    const user = await getCurrentUser();
+
+    // If dates are changing, check for conflicts
+    if (data.startDateTime && data.endDateTime) {
+         if (data.startDateTime >= data.endDateTime) {
+            return { success: false, error: "Data zakończenia musi być później niż data rozpoczęcia" };
+        }
+
+        const conflicts = await db.appointment.findMany({
+            where: {
+                tenantId: user.tenantId,
+                id: { not: id }, // Exclude self
+                OR: [
+                    {
+                        startDateTime: { lt: data.endDateTime },
+                        endDateTime: { gt: data.startDateTime }
+                    }
+                ]
+            }
+        });
+
+        if (conflicts.length > 0) {
+            return { success: false, error: "Konflikt terminów!" };
+        }
+    }
+
+    try {
+        await db.appointment.update({
+            where: {
+                id,
+                tenantId: user.tenantId
+            },
+            data: {
+                ...data
+            }
+        });
+        revalidatePath('/dashboard/calendar');
+        return { success: true };
+    } catch (error) {
+        console.error("Update Appointment Error:", error);
+        return { success: false, error: "Nie udało się zaktualizować wizyty." };
+    }
+}
