@@ -108,8 +108,19 @@ export async function updateNote(noteId: string, content: string) {
     }
 
     try {
+        // 1. Archive current version to History
+        await db.noteHistory.create({
+            data: {
+                noteId: existing.id,
+                content: existing.content, // Already encrypted
+                version: existing.version
+            }
+        });
+
+        // 2. Encrypt new content
         const encryptedContent = encrypt(content);
 
+        // 3. Update Note
         await db.note.update({
             where: { id: noteId },
             data: {
@@ -125,4 +136,24 @@ export async function updateNote(noteId: string, content: string) {
     } catch (e) {
         return { success: false, error: "Błąd aktualizacji" };
     }
+}
+
+export async function getNoteHistory(noteId: string) {
+    const user = await getCurrentUser();
+    const note = await db.note.findUnique({ where: { id: noteId }});
+
+    if(!note || note.tenantId !== user.tenantId) return [];
+
+    const history = await db.noteHistory.findMany({
+        where: { noteId },
+        orderBy: { version: 'desc' }
+    });
+
+    return history.map(h => {
+        try {
+            return { ...h, content: decrypt(h.content) };
+        } catch {
+            return { ...h, content: "[Błąd]" };
+        }
+    });
 }

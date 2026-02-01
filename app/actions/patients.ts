@@ -2,53 +2,58 @@
 
 import db from "@/lib/db";
 import { getCurrentUser } from "@/lib/auth";
-import { patientSchema, PatientFormValues } from "@/lib/schemas";
 import { revalidatePath } from "next/cache";
 
-export async function getPatients() {
-  const user = await getCurrentUser();
+export async function createPatient(data: {
+    firstName: string;
+    lastName: string;
+    phone: string;
+    email?: string;
+    guardianName?: string;
+    pesel?: string;
+    birthDate?: string; // date string yyyy-mm-dd
+    gdprConsent?: boolean;
+}) {
+    const user = await getCurrentUser();
 
-  return db.patient.findMany({
-    where: {
-      tenantId: user.tenantId
-    },
-    orderBy: {
-      lastName: 'asc'
+    try {
+        await db.patient.create({
+            data: {
+                tenantId: user.tenantId,
+                firstName: data.firstName,
+                lastName: data.lastName,
+                phone: data.phone,
+                email: data.email,
+                guardianName: data.guardianName,
+                pesel: data.pesel,
+                birthDate: data.birthDate ? new Date(data.birthDate) : null,
+                gdprConsent: data.gdprConsent || false
+            }
+        });
+        revalidatePath('/dashboard/patients');
+        return { success: true };
+    } catch (e) {
+        return { success: false, error: (e as Error).message };
     }
-  });
 }
 
-export async function createPatient(data: PatientFormValues) {
-  const user = await getCurrentUser();
-
-  const validated = patientSchema.safeParse(data);
-
-  if (!validated.success) {
-    throw new Error("Invalid data");
-  }
-
-  try {
-    const patient = await db.patient.create({
-      data: {
-        ...validated.data,
-        tenantId: user.tenantId,
-      },
+export async function getPatients() {
+    const user = await getCurrentUser();
+    return db.patient.findMany({
+        where: { tenantId: user.tenantId },
+        orderBy: { lastName: 'asc' }
     });
-
-    revalidatePath('/dashboard/patients');
-    return { success: true, patient };
-  } catch (error) {
-    console.error(error);
-    return { success: false, error: "Failed to create patient" };
-  }
 }
 
 export async function getPatientById(id: string) {
     const user = await getCurrentUser();
-    return db.patient.findFirst({
-        where: {
-            id,
-            tenantId: user.tenantId
+    return db.patient.findUnique({
+        where: { id, tenantId: user.tenantId },
+        include: {
+            appointments: {
+                orderBy: { startDateTime: 'desc' },
+                take: 50
+            }
         }
-    })
+    });
 }

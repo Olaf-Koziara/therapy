@@ -22,6 +22,7 @@ model Tenant {
   settings      Settings?
   appointments  Appointment[]
   notes         Note[]
+  availability  Availability[]
 }
 
 model User {
@@ -43,7 +44,10 @@ model Patient {
   lastName      String
   phone         String
   email         String?
+  pesel         String?
+  birthDate     DateTime?
   guardianName  String?
+  gdprConsent   Boolean  @default(false)
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
@@ -62,6 +66,7 @@ model Appointment {
   type          String   // CONSULTATION, THERAPY
   price         Decimal
   isPaid        Boolean  @default(false)
+  recurrenceId  String?  // Group ID for recurring series
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
@@ -83,6 +88,27 @@ model Note {
   tenant        Tenant   @relation(fields: [tenantId], references: [id])
   patient       Patient  @relation(fields: [patientId], references: [id])
   appointment   Appointment? @relation(fields: [appointmentId], references: [id])
+  history       NoteHistory[]
+}
+
+model NoteHistory {
+  id            String   @id @default(uuid())
+  noteId        String
+  content       String   // Encrypted content at that version
+  version       Int
+  createdAt     DateTime @default(now())
+
+  note          Note     @relation(fields: [noteId], references: [id], onDelete: Cascade)
+}
+
+model Availability {
+  id            String   @id @default(uuid())
+  tenantId      String
+  dayOfWeek     Int      // 0=Sunday, 1=Monday...
+  startTime     String   // "08:00"
+  endTime       String   // "16:00"
+
+  tenant        Tenant   @relation(fields: [tenantId], references: [id])
 }
 
 model Settings {

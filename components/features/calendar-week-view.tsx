@@ -16,6 +16,8 @@ type Appointment = {
         lastName: string;
     };
     type: string;
+    status: string;
+    isPaid: boolean;
     price: any;
     note?: {
         id: string;
@@ -88,10 +90,19 @@ export function WeekView({ date, appointments: rawAppointments }: WeekViewProps)
                                         <div
                                             key={app.id}
                                             onClick={() => setSelectedAppointment(app)}
-                                            className="bg-blue-100 text-blue-700 text-xs p-1 rounded mb-1 border-l-2 border-blue-500 truncate cursor-pointer hover:bg-blue-200"
+                                            className={cn(
+                                                "text-xs p-1 rounded mb-1 border-l-4 truncate cursor-pointer hover:opacity-80 transition-opacity",
+                                                app.status === 'COMPLETED' ? "bg-green-100 text-green-800 border-green-500" :
+                                                app.status === 'CANCELLED' ? "bg-red-100 text-red-800 border-red-500 opacity-60" :
+                                                app.status === 'NO_SHOW' ? "bg-gray-200 text-gray-600 border-gray-500" :
+                                                "bg-blue-100 text-blue-700 border-blue-500"
+                                            )}
                                             title={`${format(app.startDateTime, 'HH:mm')} - ${app.patient.lastName}`}
                                         >
-                                            <div className="font-bold">{format(app.startDateTime, 'HH:mm')}</div>
+                                            <div className="font-bold flex justify-between">
+                                                <span>{format(app.startDateTime, 'HH:mm')}</span>
+                                                {app.isPaid && <span className="text-[10px] text-green-700 font-extrabold">$</span>}
+                                            </div>
                                             <div>{app.patient.lastName}</div>
                                         </div>
                                     ))}

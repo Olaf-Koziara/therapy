@@ -25,7 +25,9 @@ export function AddAppointmentDialog({ patients }: AddAppointmentDialogProps) {
         time: "",
         duration: "60", // minutes
         type: "TERAPIA",
-        price: "150"
+        price: "150",
+        isRecurring: false,
+        recurrenceCount: "4"
     });
 
     const handleSubmit = (e: React.FormEvent) => {
@@ -46,12 +48,16 @@ export function AddAppointmentDialog({ patients }: AddAppointmentDialogProps) {
                 startDateTime,
                 endDateTime,
                 type: formData.type,
-                price: parseFloat(formData.price)
+                price: parseFloat(formData.price),
+                recurrence: formData.isRecurring ? {
+                    frequency: "WEEKLY",
+                    count: parseInt(formData.recurrenceCount)
+                } : undefined
             });
 
             if (result.success) {
                 setOpen(false);
-                setFormData({ ...formData, date: "", time: "" }); // Reset some fields
+                setFormData({ ...formData, date: "", time: "", isRecurring: false });
             } else {
                 setError(result.error || "Błąd");
             }
@@ -63,7 +69,7 @@ export function AddAppointmentDialog({ patients }: AddAppointmentDialogProps) {
             <DialogTrigger asChild>
                 <Button><Plus className="mr-2 h-4 w-4" /> Nowa Wizyta</Button>
             </DialogTrigger>
-            <DialogContent>
+            <DialogContent className="max-w-md max-h-[90vh] overflow-y-auto">
                 <DialogHeader>
                     <DialogTitle>Umów wizytę</DialogTitle>
                 </DialogHeader>
@@ -139,6 +145,36 @@ export function AddAppointmentDialog({ patients }: AddAppointmentDialogProps) {
                                 <SelectItem value="TERAPIA">Terapia</SelectItem>
                             </SelectContent>
                         </Select>
+                    </div>
+
+                    <div className="flex items-center space-x-2 border p-3 rounded bg-slate-50">
+                        <input
+                            type="checkbox"
+                            id="recurrence"
+                            checked={formData.isRecurring}
+                            onChange={e => setFormData({...formData, isRecurring: e.target.checked})}
+                            className="h-4 w-4"
+                        />
+                        <div className="grid gap-1.5 leading-none">
+                            <label
+                                htmlFor="recurrence"
+                                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                            >
+                                Wizyta cykliczna (co tydzień)
+                            </label>
+                            {formData.isRecurring && (
+                                <div className="flex items-center gap-2 mt-2">
+                                    <span className="text-xs">Liczba wizyt:</span>
+                                    <Input
+                                        type="number"
+                                        className="h-7 w-20 text-xs"
+                                        value={formData.recurrenceCount}
+                                        onChange={e => setFormData({...formData, recurrenceCount: e.target.value})}
+                                        min={2} max={12}
+                                    />
+                                </div>
+                            )}
+                        </div>
                     </div>
 
                     <Button type="submit" className="w-full" disabled={isPending}>

@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { deleteAppointment, updateAppointment } from "@/app/actions/calendar";
 import { format } from "date-fns";
 import { NoteEditor } from "@/components/features/note-editor";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 type Appointment = {
     id: string;
@@ -19,7 +20,9 @@ type Appointment = {
         lastName: string;
     };
     type: string;
+    status: string;
     price: any;
+    isPaid: boolean;
     note?: {
         id: string;
         content: string;
@@ -40,13 +43,17 @@ export function AppointmentDetailsDialog({ appointment, open, onOpenChange }: Ap
     // Edit state
     const [startTime, setStartTime] = useState("");
     const [duration, setDuration] = useState("60");
+    const [status, setStatus] = useState("");
+    const [isPaid, setIsPaid] = useState(false);
 
     useEffect(() => {
-        if (open) {
+        if (open && appointment) {
             setIsEditing(false);
             setIsEditingNote(false);
+            setStatus(appointment.status);
+            setIsPaid(appointment.isPaid);
         }
-    }, [open]);
+    }, [open, appointment]);
 
     if (!appointment) return null;
 
@@ -65,7 +72,9 @@ export function AppointmentDetailsDialog({ appointment, open, onOpenChange }: Ap
         startTransition(async () => {
             const res = await updateAppointment(appointment.id, {
                 startDateTime: start,
-                endDateTime: end
+                endDateTime: end,
+                status: status,
+                isPaid: isPaid
             });
             if (res.success) {
                 setIsEditing(false);
@@ -75,6 +84,25 @@ export function AppointmentDetailsDialog({ appointment, open, onOpenChange }: Ap
             }
         });
     };
+
+    // Quick save for status/payment change without full edit mode
+    const handleQuickUpdate = (newStatus?: string, newPaid?: boolean) => {
+        startTransition(async () => {
+            // Optimistic update
+            if(newStatus) setStatus(newStatus);
+            if(newPaid !== undefined) setIsPaid(newPaid);
+
+            const res = await updateAppointment(appointment.id, {
+                status: newStatus !== undefined ? newStatus : status,
+                isPaid: newPaid !== undefined ? newPaid : isPaid
+            });
+
+            if (!res.success) {
+                 // Revert if failed (simplified, ideally uses prev state)
+                 alert("Błąd aktualizacji: " + res.error);
+            }
+        });
+    }
 
     const handleDelete = () => {
         if (!confirm("Czy na pewno chcesz usunąć tę wizytę?")) return;
@@ -105,24 +133,73 @@ export function AppointmentDetailsDialog({ appointment, open, onOpenChange }: Ap
 
                     {isEditing ? (
                         <>
-                             <div>
-                                <Label>Godzina</Label>
-                                <Input type="time" value={startTime} onChange={e => setStartTime(e.target.value)} />
+                             <div className="grid grid-cols-2 gap-4">
+                                <div>
+                                    <Label>Godzina</Label>
+                                    <Input type="time" value={startTime} onChange={e => setStartTime(e.target.value)} />
+                                </div>
+                                <div>
+                                    <Label>Czas trwania (min)</Label>
+                                    <Input type="number" value={duration} onChange={e => setDuration(e.target.value)} />
+                                </div>
                             </div>
                             <div>
-                                <Label>Czas trwania (min)</Label>
-                                <Input type="number" value={duration} onChange={e => setDuration(e.target.value)} />
+                                <Label>Status</Label>
+                                <Select value={status} onValueChange={setStatus}>
+                                    <SelectTrigger>
+                                        <SelectValue />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="SCHEDULED">Zaplanowana</SelectItem>
+                                        <SelectItem value="COMPLETED">Odbyta</SelectItem>
+                                        <SelectItem value="CANCELLED">Odwołana</SelectItem>
+                                        <SelectItem value="NO_SHOW">Nieobecność</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            </div>
+                            <div className="flex items-center space-x-2 border p-2 rounded">
+                                <input
+                                    type="checkbox"
+                                    id="paid"
+                                    checked={isPaid}
+                                    onChange={e => setIsPaid(e.target.checked)}
+                                    className="h-4 w-4"
+                                />
+                                <Label htmlFor="paid">Opłacona</Label>
                             </div>
                         </>
                     ) : (
                         <>
-                            <div>
-                                <Label>Termin</Label>
-                                <div>{format(new Date(appointment.startDateTime), "yyyy-MM-dd HH:mm")} - {format(new Date(appointment.endDateTime), "HH:mm")}</div>
+                            <div className="grid grid-cols-2 gap-4">
+                                <div>
+                                    <Label>Termin</Label>
+                                    <div>{format(new Date(appointment.startDateTime), "yyyy-MM-dd HH:mm")}</div>
+                                </div>
+                                <div>
+                                    <Label>Do</Label>
+                                    <div>{format(new Date(appointment.endDateTime), "HH:mm")}</div>
+                                </div>
                             </div>
-                             <div>
-                                <Label>Typ</Label>
-                                <div>{appointment.type}</div>
+
+                            <div className="flex gap-4 items-center">
+                                <div className="flex-1">
+                                    <Label>Status</Label>
+                                    <Select value={status} onValueChange={(v) => handleQuickUpdate(v, undefined)} disabled={isPending}>
+                                        <SelectTrigger className="h-8">
+                                            <SelectValue />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="SCHEDULED">Zaplanowana</SelectItem>
+                                            <SelectItem value="COMPLETED">Odbyta</SelectItem>
+                                            <SelectItem value="CANCELLED">Odwołana</SelectItem>
+                                            <SelectItem value="NO_SHOW">Nieobecność</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+                                <div className="flex items-center space-x-2 border p-1 px-3 rounded h-8 mt-6 cursor-pointer" onClick={() => handleQuickUpdate(undefined, !isPaid)}>
+                                     <div className={`w-3 h-3 rounded-full ${isPaid ? "bg-green-500" : "bg-red-500"}`} />
+                                     <span className="text-sm">{isPaid ? "Opłacona" : "Nieopłacona"}</span>
+                                </div>
                             </div>
                         </>
                     )}
@@ -151,7 +228,7 @@ export function AppointmentDetailsDialog({ appointment, open, onOpenChange }: Ap
                                 appointmentId={appointment.id}
                                 placeholder="Dodaj notatkę do tej wizyty..."
                                 onSaved={() => {
-                                    onOpenChange(false); // Close dialog to refresh data
+                                    onOpenChange(false);
                                 }}
                              />
                         )}
