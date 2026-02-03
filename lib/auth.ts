@@ -1,6 +1,7 @@
+import { cache } from "react";
 import db from "@/lib/db";
 
-export async function getCurrentUser() {
+export const getCurrentUser = cache(async () => {
   // MOCK AUTH for MVP
   // In real app: import { auth } from "@clerk/nextjs"; const { userId } = auth();
 
@@ -30,4 +31,4 @@ export async function getCurrentUser() {
   });
 
   return newTenant.users[0];
-}
+});
