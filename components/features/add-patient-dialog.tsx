@@ -59,52 +59,52 @@ export function AddPatientDialog() {
 
                     <div className="grid grid-cols-2 gap-4">
                         <div>
-                            <Label>Imię</Label>
-                            <Input value={formData.firstName} onChange={e => setFormData({...formData, firstName: e.target.value})} required />
+                            <Label htmlFor="patient-firstName">Imię <span className="text-red-500 ml-1">*</span></Label>
+                            <Input id="patient-firstName" value={formData.firstName} onChange={e => setFormData({...formData, firstName: e.target.value})} required />
                         </div>
                         <div>
-                            <Label>Nazwisko</Label>
-                            <Input value={formData.lastName} onChange={e => setFormData({...formData, lastName: e.target.value})} required />
+                            <Label htmlFor="patient-lastName">Nazwisko <span className="text-red-500 ml-1">*</span></Label>
+                            <Input id="patient-lastName" value={formData.lastName} onChange={e => setFormData({...formData, lastName: e.target.value})} required />
                         </div>
                     </div>
 
                     <div>
-                        <Label>Telefon</Label>
-                        <Input value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})} required />
+                        <Label htmlFor="patient-phone">Telefon <span className="text-red-500 ml-1">*</span></Label>
+                        <Input id="patient-phone" value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})} required />
                     </div>
 
                     <div>
-                         <Label>Email (opcjonalnie)</Label>
-                         <Input type="email" value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})} />
+                         <Label htmlFor="patient-email">Email (opcjonalnie)</Label>
+                         <Input id="patient-email" type="email" value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})} />
                     </div>
 
                     <div className="grid grid-cols-2 gap-4">
                         <div>
-                            <Label>PESEL</Label>
-                            <Input value={formData.pesel} onChange={e => setFormData({...formData, pesel: e.target.value})} />
+                            <Label htmlFor="patient-pesel">PESEL</Label>
+                            <Input id="patient-pesel" value={formData.pesel} onChange={e => setFormData({...formData, pesel: e.target.value})} />
                         </div>
                         <div>
-                            <Label>Data Urodzenia</Label>
-                            <Input type="date" value={formData.birthDate} onChange={e => setFormData({...formData, birthDate: e.target.value})} />
+                            <Label htmlFor="patient-birthDate">Data Urodzenia</Label>
+                            <Input id="patient-birthDate" type="date" value={formData.birthDate} onChange={e => setFormData({...formData, birthDate: e.target.value})} />
                         </div>
                     </div>
 
                     <div>
-                         <Label>Imię opiekuna (dla dzieci)</Label>
-                         <Input value={formData.guardianName} onChange={e => setFormData({...formData, guardianName: e.target.value})} />
+                         <Label htmlFor="patient-guardianName">Imię opiekuna (dla dzieci)</Label>
+                         <Input id="patient-guardianName" value={formData.guardianName} onChange={e => setFormData({...formData, guardianName: e.target.value})} />
                     </div>
 
                     <div className="flex items-center space-x-2 border p-3 rounded bg-slate-50">
                         <input
                             type="checkbox"
-                            id="gdpr"
+                            id="patient-gdpr"
                             checked={formData.gdprConsent}
                             onChange={e => setFormData({...formData, gdprConsent: e.target.checked})}
                             className="h-4 w-4"
                             required
                         />
-                         <Label htmlFor="gdpr" className="text-sm font-normal">
-                            Potwierdzam odebranie zgody RODO (z dzisiejszą datą)
+                         <Label htmlFor="patient-gdpr" className="text-sm font-normal">
+                            Potwierdzam odebranie zgody RODO (z dzisiejszą datą) <span className="text-red-500 ml-1">*</span>
                         </Label>
                     </div>
 

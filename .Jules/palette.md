@@ -1,0 +1,1 @@
+## 2025-02-27 - Manual Form Accessibility\n**Learning:** Components managing form state manually (without react-hook-form) require explicit 'htmlFor' on labels and matching 'id' on inputs for accessibility. Also, unique IDs (e.g., 'patient-firstName') prevent conflicts in dialogs.\n**Action:** Always verify label-input association in manual forms and use prefixed IDs.
