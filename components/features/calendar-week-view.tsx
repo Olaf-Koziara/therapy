@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react";
-import { startOfWeek, endOfWeek, eachDayOfInterval, format, addDays, isSameDay } from "date-fns";
+import { startOfWeek, endOfWeek, eachDayOfInterval, format, isSameDay } from "date-fns";
 import { pl } from "date-fns/locale";
 import { cn } from "@/lib/utils";
 import { AppointmentDetailsDialog } from "./appointment-details-dialog";
@@ -18,6 +18,7 @@ type Appointment = {
     type: string;
     status: string;
     isPaid: boolean;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     price: any;
     note?: {
         id: string;
@@ -87,24 +88,31 @@ export function WeekView({ date, appointments: rawAppointments }: WeekViewProps)
                             return (
                                 <div key={day.toISOString()} className="border-r last:border-r-0 p-1 relative">
                                     {dayApps.map(app => (
-                                        <div
+                                        <button
                                             key={app.id}
+                                            type="button"
                                             onClick={() => setSelectedAppointment(app)}
                                             className={cn(
-                                                "text-xs p-1 rounded mb-1 border-l-4 truncate cursor-pointer hover:opacity-80 transition-opacity",
+                                                "text-xs p-1 rounded mb-1 border-l-4 truncate text-left w-full hover:opacity-80 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
                                                 app.status === 'COMPLETED' ? "bg-green-100 text-green-800 border-green-500" :
                                                 app.status === 'CANCELLED' ? "bg-red-100 text-red-800 border-red-500 opacity-60" :
                                                 app.status === 'NO_SHOW' ? "bg-gray-200 text-gray-600 border-gray-500" :
                                                 "bg-blue-100 text-blue-700 border-blue-500"
                                             )}
                                             title={`${format(app.startDateTime, 'HH:mm')} - ${app.patient.lastName}`}
+                                            aria-label={`Wizyta: ${format(app.startDateTime, 'HH:mm')}, Pacjent: ${app.patient.lastName}, Status: ${
+                                                app.status === 'COMPLETED' ? "Odbyta" :
+                                                app.status === 'CANCELLED' ? "Odwołana" :
+                                                app.status === 'NO_SHOW' ? "Nieobecność" :
+                                                "Zaplanowana"
+                                            }`}
                                         >
                                             <div className="font-bold flex justify-between">
                                                 <span>{format(app.startDateTime, 'HH:mm')}</span>
                                                 {app.isPaid && <span className="text-[10px] text-green-700 font-extrabold">$</span>}
                                             </div>
                                             <div>{app.patient.lastName}</div>
-                                        </div>
+                                        </button>
                                     ))}
                                 </div>
                             );
