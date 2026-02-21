@@ -1,0 +1,17 @@
+
+> temp_app@0.1.0 dev /app
+> next dev
+
+▲ Next.js 16.1.6 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://192.168.0.2:3000
+- Environments: .env
+
+✓ Starting...
+✓ Ready in 2s
+○ Compiling /dashboard/patients ...
+Seeding database with initial Tenant and User...
+ GET /dashboard/patients 200 in 4.5s (compile: 4.0s, render: 538ms)
+ GET /dashboard/patients 200 in 135ms (compile: 6ms, render: 129ms)
+ GET /dashboard/patients 200 in 193ms (compile: 4ms, render: 189ms)
+ POST /dashboard/patients 200 in 111ms (compile: 10ms, render: 101ms)
