@@ -6,7 +6,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { createPatient } from "@/app/actions/patients";
-import { Plus } from "lucide-react";
+import { Plus, Loader2 } from "lucide-react";
 
 export function AddPatientDialog() {
     const [open, setOpen] = useState(false);
@@ -55,43 +55,86 @@ export function AddPatientDialog() {
                     <DialogTitle>Nowy Pacjent</DialogTitle>
                 </DialogHeader>
                 <form onSubmit={handleSubmit} className="space-y-4">
-                    {error && <div className="text-red-500 text-sm">{error}</div>}
+                    {error && (
+                        <div role="alert" className="text-red-500 text-sm bg-red-50 p-2 rounded">
+                            {error}
+                        </div>
+                    )}
 
                     <div className="grid grid-cols-2 gap-4">
-                        <div>
-                            <Label>Imię</Label>
-                            <Input value={formData.firstName} onChange={e => setFormData({...formData, firstName: e.target.value})} required />
+                        <div className="space-y-2">
+                            <Label htmlFor="firstName">Imię</Label>
+                            <Input
+                                id="firstName"
+                                value={formData.firstName}
+                                onChange={e => setFormData({...formData, firstName: e.target.value})}
+                                required
+                                placeholder="Jan"
+                            />
                         </div>
-                        <div>
-                            <Label>Nazwisko</Label>
-                            <Input value={formData.lastName} onChange={e => setFormData({...formData, lastName: e.target.value})} required />
+                        <div className="space-y-2">
+                            <Label htmlFor="lastName">Nazwisko</Label>
+                            <Input
+                                id="lastName"
+                                value={formData.lastName}
+                                onChange={e => setFormData({...formData, lastName: e.target.value})}
+                                required
+                                placeholder="Kowalski"
+                            />
                         </div>
                     </div>
 
-                    <div>
-                        <Label>Telefon</Label>
-                        <Input value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})} required />
+                    <div className="space-y-2">
+                        <Label htmlFor="phone">Telefon</Label>
+                        <Input
+                            id="phone"
+                            value={formData.phone}
+                            onChange={e => setFormData({...formData, phone: e.target.value})}
+                            required
+                            placeholder="123 456 789"
+                        />
                     </div>
 
-                    <div>
-                         <Label>Email (opcjonalnie)</Label>
-                         <Input type="email" value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})} />
+                    <div className="space-y-2">
+                         <Label htmlFor="email">Email (opcjonalnie)</Label>
+                         <Input
+                            id="email"
+                            type="email"
+                            value={formData.email}
+                            onChange={e => setFormData({...formData, email: e.target.value})}
+                            placeholder="jan@example.com"
+                        />
                     </div>
 
                     <div className="grid grid-cols-2 gap-4">
-                        <div>
-                            <Label>PESEL</Label>
-                            <Input value={formData.pesel} onChange={e => setFormData({...formData, pesel: e.target.value})} />
+                        <div className="space-y-2">
+                            <Label htmlFor="pesel">PESEL</Label>
+                            <Input
+                                id="pesel"
+                                value={formData.pesel}
+                                onChange={e => setFormData({...formData, pesel: e.target.value})}
+                                placeholder="00000000000"
+                            />
                         </div>
-                        <div>
-                            <Label>Data Urodzenia</Label>
-                            <Input type="date" value={formData.birthDate} onChange={e => setFormData({...formData, birthDate: e.target.value})} />
+                        <div className="space-y-2">
+                            <Label htmlFor="birthDate">Data Urodzenia</Label>
+                            <Input
+                                id="birthDate"
+                                type="date"
+                                value={formData.birthDate}
+                                onChange={e => setFormData({...formData, birthDate: e.target.value})}
+                            />
                         </div>
                     </div>
 
-                    <div>
-                         <Label>Imię opiekuna (dla dzieci)</Label>
-                         <Input value={formData.guardianName} onChange={e => setFormData({...formData, guardianName: e.target.value})} />
+                    <div className="space-y-2">
+                         <Label htmlFor="guardianName">Imię opiekuna (dla dzieci)</Label>
+                         <Input
+                            id="guardianName"
+                            value={formData.guardianName}
+                            onChange={e => setFormData({...formData, guardianName: e.target.value})}
+                            placeholder="Imię i nazwisko rodzica"
+                        />
                     </div>
 
                     <div className="flex items-center space-x-2 border p-3 rounded bg-slate-50">
@@ -100,16 +143,23 @@ export function AddPatientDialog() {
                             id="gdpr"
                             checked={formData.gdprConsent}
                             onChange={e => setFormData({...formData, gdprConsent: e.target.checked})}
-                            className="h-4 w-4"
+                            className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
                             required
                         />
-                         <Label htmlFor="gdpr" className="text-sm font-normal">
+                         <Label htmlFor="gdpr" className="text-sm font-normal cursor-pointer">
                             Potwierdzam odebranie zgody RODO (z dzisiejszą datą)
                         </Label>
                     </div>
 
                     <Button type="submit" className="w-full" disabled={isPending}>
-                        {isPending ? "Zapisywanie..." : "Zapisz"}
+                        {isPending ? (
+                            <>
+                                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                Zapisywanie...
+                            </>
+                        ) : (
+                            "Zapisz"
+                        )}
                     </Button>
                 </form>
             </DialogContent>
