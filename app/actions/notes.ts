@@ -60,7 +60,7 @@ export async function getPatientNotes(patientId: string) {
         }
     });
 
-    return notes.map(note => {
+    return notes.map((note: any) => {
         try {
             return {
                 ...note,
@@ -149,7 +149,7 @@ export async function getNoteHistory(noteId: string) {
         orderBy: { version: 'desc' }
     });
 
-    return history.map(h => {
+    return history.map((h: any) => {
         try {
             return { ...h, content: decrypt(h.content) };
         } catch {

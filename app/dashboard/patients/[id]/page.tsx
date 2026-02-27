@@ -20,8 +20,8 @@ export default async function PatientPage({ params }: { params: Promise<{ id: st
 
   // Calculate Wallet
   const totalDue = patient.appointments
-    .filter(app => app.status === 'COMPLETED' && !app.isPaid)
-    .reduce((sum, app) => sum + Number(app.price), 0);
+    .filter((app: any) => app.status === 'COMPLETED' && !app.isPaid)
+    .reduce((sum: number, app: any) => sum + Number(app.price), 0);
 
   return (
     <div className="space-y-6">
@@ -87,7 +87,7 @@ export default async function PatientPage({ params }: { params: Promise<{ id: st
                          <p className="text-muted-foreground text-sm">Brak wizyt w historii.</p>
                     ) : (
                         <div className="space-y-2">
-                            {patient.appointments.map(app => (
+                            {patient.appointments.map((app: any) => (
                                 <div key={app.id} className="flex justify-between items-center text-sm border-b pb-2 last:border-0">
                                     <div>
                                         <div className="font-medium">{format(app.startDateTime, "yyyy-MM-dd HH:mm")}</div>
