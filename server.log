@@ -1,5 +1,5 @@
 
-> temp_app@0.1.0 dev
+> temp_app@0.1.0 dev /app
 > next dev
 
 ▲ Next.js 16.1.6 (Turbopack)
@@ -8,46 +8,27 @@
 - Environments: .env
 
 ✓ Starting...
-✓ Ready in 1374ms
- GET /dashboard/patients 200 in 1148ms (compile: 519ms, render: 629ms)
- POST /dashboard/patients 200 in 89ms (compile: 6ms, render: 83ms)
- GET /dashboard/settings/availability 200 in 210ms (compile: 49ms, render: 161ms)
- POST /dashboard/settings/availability 200 in 75ms (compile: 4ms, render: 71ms)
- GET /dashboard/calendar 200 in 332ms (compile: 106ms, render: 226ms)
+✓ Ready in 1985ms
+○ Compiling /dashboard/patients ...
+ GET /dashboard/patients 200 in 7.3s (compile: 6.5s, render: 739ms)
+ POST /dashboard/patients 200 in 141ms (compile: 6ms, render: 135ms)
+ GET /dashboard/settings/availability 200 in 1190ms (compile: 995ms, render: 195ms)
+ POST /dashboard/settings/availability 200 in 81ms (compile: 4ms, render: 77ms)
+ GET /dashboard/calendar 200 in 2.5s (compile: 2.2s, render: 289ms)
 Only plain objects can be passed to Client Components from Server Components. Decimal objects are not supported.
   {id: ..., tenantId: ..., patientId: ..., startDateTime: ..., endDateTime: ..., status: ..., type: ..., price: Decimal, isPaid: ..., recurrenceId: ..., createdAt: ..., updatedAt: ..., patient: ..., note: ...}
                                                                                                                 ^^^^^^^
- POST /dashboard/calendar 200 in 77ms (compile: 4ms, render: 74ms)
+ POST /dashboard/calendar 200 in 79ms (compile: 3ms, render: 76ms)
 Only plain objects can be passed to Client Components from Server Components. Decimal objects are not supported.
   {id: ..., tenantId: ..., patientId: ..., startDateTime: ..., endDateTime: ..., status: ..., type: ..., price: Decimal, isPaid: ..., recurrenceId: ..., createdAt: ..., updatedAt: ..., patient: ..., note: ...}
                                                                                                                 ^^^^^^^
- POST /dashboard/calendar 200 in 95ms (compile: 4ms, render: 92ms)
+ POST /dashboard/calendar 200 in 74ms (compile: 3ms, render: 70ms)
 Only plain objects can be passed to Client Components from Server Components. Decimal objects are not supported.
   {id: ..., tenantId: ..., patientId: ..., startDateTime: ..., endDateTime: ..., status: ..., type: ..., price: Decimal, isPaid: ..., recurrenceId: ..., createdAt: ..., updatedAt: ..., patient: ..., note: ...}
                                                                                                                 ^^^^^^^
- POST /dashboard/calendar 200 in 72ms (compile: 4ms, render: 68ms)
+ POST /dashboard/calendar 200 in 69ms (compile: 5ms, render: 65ms)
 Only plain objects can be passed to Client Components from Server Components. Decimal objects are not supported.
   {id: ..., tenantId: ..., patientId: ..., startDateTime: ..., endDateTime: ..., status: ..., type: ..., price: Decimal, isPaid: ..., recurrenceId: ..., createdAt: ..., updatedAt: ..., patient: ..., note: ...}
                                                                                                                 ^^^^^^^
- GET /dashboard/calendar 200 in 180ms (compile: 6ms, render: 174ms)
- GET /dashboard/patients 200 in 152ms (compile: 7ms, render: 144ms)
- POST /dashboard/patients 200 in 70ms (compile: 4ms, render: 66ms)
- GET /dashboard/settings/availability 200 in 177ms (compile: 3ms, render: 174ms)
- POST /dashboard/settings/availability 200 in 137ms (compile: 3ms, render: 134ms)
- GET /dashboard/calendar 200 in 142ms (compile: 3ms, render: 139ms)
-Only plain objects can be passed to Client Components from Server Components. Decimal objects are not supported.
-  {id: ..., tenantId: ..., patientId: ..., startDateTime: ..., endDateTime: ..., status: ..., type: ..., price: Decimal, isPaid: ..., recurrenceId: ..., createdAt: ..., updatedAt: ..., patient: ..., note: ...}
-                                                                                                                ^^^^^^^
- POST /dashboard/calendar 200 in 74ms (compile: 4ms, render: 71ms)
-Only plain objects can be passed to Client Components from Server Components. Decimal objects are not supported.
-  {id: ..., tenantId: ..., patientId: ..., startDateTime: ..., endDateTime: ..., status: ..., type: ..., price: Decimal, isPaid: ..., recurrenceId: ..., createdAt: ..., updatedAt: ..., patient: ..., note: ...}
-                                                                                                                ^^^^^^^
- POST /dashboard/calendar 200 in 83ms (compile: 3ms, render: 80ms)
-Only plain objects can be passed to Client Components from Server Components. Decimal objects are not supported.
-  {id: ..., tenantId: ..., patientId: ..., startDateTime: ..., endDateTime: ..., status: ..., type: ..., price: Decimal, isPaid: ..., recurrenceId: ..., createdAt: ..., updatedAt: ..., patient: ..., note: ...}
-                                                                                                                ^^^^^^^
- POST /dashboard/calendar 200 in 54ms (compile: 3ms, render: 51ms)
-Only plain objects can be passed to Client Components from Server Components. Decimal objects are not supported.
-  {id: ..., tenantId: ..., patientId: ..., startDateTime: ..., endDateTime: ..., status: ..., type: ..., price: Decimal, isPaid: ..., recurrenceId: ..., createdAt: ..., updatedAt: ..., patient: ..., note: ...}
-                                                                                                                ^^^^^^^
- GET /dashboard/calendar 200 in 97ms (compile: 3ms, render: 94ms)
+ GET /dashboard/calendar 200 in 170ms (compile: 5ms, render: 165ms)
+ GET /dashboard/patients 200 in 230ms (compile: 6ms, render: 224ms)
