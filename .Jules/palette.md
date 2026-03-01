@@ -1,0 +1,3 @@
+## 2024-05-24 - [Accessible Form Labels with Shadcn/UI]
+**Learning:** In forms using `shadcn/ui` where `Label` components are used as siblings to `Input` components (rather than wrappers), the implicit association fails. This leads to a critical accessibility and UX issue: screen readers don't associate the input with the label, and clicking the label doesn't focus the input.
+**Action:** Always provide an explicit `htmlFor` prop on the `Label` and a corresponding `id` on the `Input` when they are siblings. Added this to `AddPatientDialog` and will actively look for this pattern in future components.
