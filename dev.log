@@ -1,0 +1,15 @@
+
+> temp_app@0.1.0 dev /app
+> next dev
+
+▲ Next.js 16.1.6 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://192.168.0.2:3000
+- Environments: .env
+
+✓ Starting...
+⚠ Turbopack's filesystem cache has been deleted because we previously detected an internal error in Turbopack. Builds or page loads may be slower as a result.
+✓ Ready in 1275ms
+○ Compiling /dashboard/calendar ...
+ GET /dashboard/calendar 200 in 6.8s (compile: 6.0s, render: 806ms)
+ GET /dashboard/calendar 200 in 153ms (compile: 5ms, render: 148ms)

@@ -87,11 +87,12 @@ export function WeekView({ date, appointments: rawAppointments }: WeekViewProps)
                             return (
                                 <div key={day.toISOString()} className="border-r last:border-r-0 p-1 relative">
                                     {dayApps.map(app => (
-                                        <div
+                                        <button
+                                            type="button"
                                             key={app.id}
                                             onClick={() => setSelectedAppointment(app)}
                                             className={cn(
-                                                "text-xs p-1 rounded mb-1 border-l-4 truncate cursor-pointer hover:opacity-80 transition-opacity",
+                                                "w-full text-left text-xs p-1 rounded mb-1 border-l-4 truncate cursor-pointer hover:opacity-80 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1",
                                                 app.status === 'COMPLETED' ? "bg-green-100 text-green-800 border-green-500" :
                                                 app.status === 'CANCELLED' ? "bg-red-100 text-red-800 border-red-500 opacity-60" :
                                                 app.status === 'NO_SHOW' ? "bg-gray-200 text-gray-600 border-gray-500" :
@@ -103,8 +104,8 @@ export function WeekView({ date, appointments: rawAppointments }: WeekViewProps)
                                                 <span>{format(app.startDateTime, 'HH:mm')}</span>
                                                 {app.isPaid && <span className="text-[10px] text-green-700 font-extrabold">$</span>}
                                             </div>
-                                            <div>{app.patient.lastName}</div>
-                                        </div>
+                                            <div className="truncate">{app.patient.lastName}</div>
+                                        </button>
                                     ))}
                                 </div>
                             );
