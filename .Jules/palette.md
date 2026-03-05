@@ -1,0 +1,3 @@
+## 2026-03-05 - Interactive Custom Views require semantic buttons
+**Learning:** Custom interactive components like calendar slots that behave like buttons must be implemented using semantic `<button type="button">` elements instead of `<div>` with `onClick`. This ensures they are keyboard focusable and screen reader friendly.
+**Action:** Always verify that interactive view elements use button tags with proper `w-full text-left block` layout adjustments and explicit `focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1` focus indicators to maintain design consistency while adding full accessibility.
