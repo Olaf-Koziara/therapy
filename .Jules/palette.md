@@ -1,0 +1,3 @@
+## 2024-03-07 - Interactive Calendar Elements
+**Learning:** In interactive data grids like calendars (`calendar-week-view.tsx`), rendering appointment blocks as clickable `<div>` elements causes them to be ignored by screen readers and keyboard navigation (tabbing). This severely hinders accessibility for users relying on non-pointer interactions.
+**Action:** Always replace interactive `onClick` `<div>` elements with semantic `<button type="button">`. Ensure they have a descriptive `aria-label` (e.g., "Wizyta 10:00, pacjent Kowalski"), proper focus indicators (`focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring`), and `w-full text-left` to preserve original layout.

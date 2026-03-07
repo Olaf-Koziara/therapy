@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react";
-import { startOfWeek, endOfWeek, eachDayOfInterval, format, addDays, isSameDay } from "date-fns";
+import { startOfWeek, endOfWeek, eachDayOfInterval, format, isSameDay } from "date-fns";
 import { pl } from "date-fns/locale";
 import { cn } from "@/lib/utils";
 import { AppointmentDetailsDialog } from "./appointment-details-dialog";
@@ -87,11 +87,13 @@ export function WeekView({ date, appointments: rawAppointments }: WeekViewProps)
                             return (
                                 <div key={day.toISOString()} className="border-r last:border-r-0 p-1 relative">
                                     {dayApps.map(app => (
-                                        <div
+                                        <button
                                             key={app.id}
+                                            type="button"
                                             onClick={() => setSelectedAppointment(app)}
+                                            aria-label={`Wizyta ${format(app.startDateTime, 'HH:mm')}, pacjent ${app.patient.lastName}`}
                                             className={cn(
-                                                "text-xs p-1 rounded mb-1 border-l-4 truncate cursor-pointer hover:opacity-80 transition-opacity",
+                                                "w-full text-left text-xs p-1 rounded mb-1 border-l-4 truncate cursor-pointer hover:opacity-80 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
                                                 app.status === 'COMPLETED' ? "bg-green-100 text-green-800 border-green-500" :
                                                 app.status === 'CANCELLED' ? "bg-red-100 text-red-800 border-red-500 opacity-60" :
                                                 app.status === 'NO_SHOW' ? "bg-gray-200 text-gray-600 border-gray-500" :
@@ -104,7 +106,7 @@ export function WeekView({ date, appointments: rawAppointments }: WeekViewProps)
                                                 {app.isPaid && <span className="text-[10px] text-green-700 font-extrabold">$</span>}
                                             </div>
                                             <div>{app.patient.lastName}</div>
-                                        </div>
+                                        </button>
                                     ))}
                                 </div>
                             );
