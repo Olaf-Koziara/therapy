@@ -1,0 +1,4 @@
+## 2024-10-27 - Interactive Div Elements Conversion to Button
+
+**Learning:** Interactive custom view elements like calendar slots or toggles implemented as `<div>` elements with `onClick` handlers fail basic keyboard accessibility because they lack focusability and enter/space activation.
+**Action:** Always use semantic `<button type="button">` tags for interactive items (adding `w-full text-left` to maintain original `<div>` block-like behavior where needed), and apply clear focus styles (`focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring`) so keyboard users can navigate to and activate them.

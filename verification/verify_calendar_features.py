@@ -49,10 +49,11 @@ def verify_calendar_features():
         print("Details dialog opened.")
 
         # 3. Test Edit
-        page.click("button:has-text('Edytuj')")
+        page.click("button:has-text('Edytuj wizytę')")
         page.wait_for_selector("text=Edytuj wizytę")
         page.fill("input[type='time']", "13:00")
-        page.click("button:has-text('Zapisz')")
+        # Ensure it clicks the correct save button, not the save note button
+        page.get_by_role("button", name="Zapisz", exact=True).click()
 
         page.wait_for_selector("text=Edytuj wizytę", state="hidden", timeout=60000)
         page.wait_for_selector(".bg-blue-100:has-text('13:00')")
