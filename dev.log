@@ -1,0 +1,14 @@
+
+> temp_app@0.1.0 dev /app
+> next dev
+
+▲ Next.js 16.1.6 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://192.168.0.2:3000
+- Environments: .env
+
+✓ Starting...
+✓ Ready in 1060ms
+ GET / 200 in 1572ms (compile: 1275ms, render: 297ms)
+ GET /dashboard/patients 200 in 486ms (compile: 90ms, render: 397ms)
+ POST /dashboard/patients 200 in 79ms (compile: 5ms, render: 75ms)
