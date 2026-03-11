@@ -1,0 +1,3 @@
+## 2024-05-18 - Interactive Divs instead of Buttons
+**Learning:** In this application, interactive elements like calendar appointment blocks and toggle components were frequently built using `<div>` elements with `onClick` handlers. This creates major accessibility issues because `<div>` elements are not keyboard focusable by default and do not semanticly inform screen readers that they are interactive.
+**Action:** Always refactor interactive `<div>` elements to semantic `<button type="button">` elements. Add appropriate focus styles (`focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1`) for keyboard users and include `aria-label` or `aria-pressed` where appropriate to support screen readers.
