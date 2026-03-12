@@ -1,0 +1,3 @@
+## 2024-03-12 - Semantic Buttons for Interactive Views
+**Learning:** Custom interactive elements (like calendar appointment slots or visual blocks) constructed using `<div>` with `onClick` handlers completely lack keyboard accessibility and screen reader support by default.
+**Action:** Always use semantic `<button type="button">` tags for interactive elements and apply explicit keyboard focus styling (`focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring`) to ensure full keyboard navigation. When transforming divs to buttons, remember to add layout preserving classes like `w-full text-left`.
