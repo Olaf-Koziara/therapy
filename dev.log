@@ -1,0 +1,73 @@
+
+> temp_app@0.1.0 dev /app
+> next dev
+
+▲ Next.js 16.1.6 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://192.168.0.2:3000
+- Environments: .env
+
+✓ Starting...
+✓ Ready in 1350ms
+○ Compiling /dashboard/patients ...
+ GET /dashboard/patients 200 in 5.7s (compile: 4.9s, render: 795ms)
+ POST /dashboard/patients 200 in 169ms (compile: 5ms, render: 164ms)
+ GET /dashboard/settings/availability 200 in 1486ms (compile: 1198ms, render: 287ms)
+ POST /dashboard/settings/availability 200 in 103ms (compile: 4ms, render: 98ms)
+ GET /dashboard/calendar 200 in 2.5s (compile: 2.2s, render: 284ms)
+Only plain objects can be passed to Client Components from Server Components. Decimal objects are not supported.
+  {id: ..., tenantId: ..., patientId: ..., startDateTime: ..., endDateTime: ..., status: ..., type: ..., price: Decimal, isPaid: ..., recurrenceId: ..., createdAt: ..., updatedAt: ..., patient: ..., note: ...}
+                                                                                                                ^^^^^^^
+ POST /dashboard/calendar 200 in 101ms (compile: 4ms, render: 97ms)
+Only plain objects can be passed to Client Components from Server Components. Decimal objects are not supported.
+  {id: ..., tenantId: ..., patientId: ..., startDateTime: ..., endDateTime: ..., status: ..., type: ..., price: Decimal, isPaid: ..., recurrenceId: ..., createdAt: ..., updatedAt: ..., patient: ..., note: ...}
+                                                                                                                ^^^^^^^
+ POST /dashboard/calendar 200 in 66ms (compile: 3ms, render: 63ms)
+Only plain objects can be passed to Client Components from Server Components. Decimal objects are not supported.
+  {id: ..., tenantId: ..., patientId: ..., startDateTime: ..., endDateTime: ..., status: ..., type: ..., price: Decimal, isPaid: ..., recurrenceId: ..., createdAt: ..., updatedAt: ..., patient: ..., note: ...}
+                                                                                                                ^^^^^^^
+ POST /dashboard/calendar 200 in 69ms (compile: 4ms, render: 66ms)
+Only plain objects can be passed to Client Components from Server Components. Decimal objects are not supported.
+  {id: ..., tenantId: ..., patientId: ..., startDateTime: ..., endDateTime: ..., status: ..., type: ..., price: Decimal, isPaid: ..., recurrenceId: ..., createdAt: ..., updatedAt: ..., patient: ..., note: ...}
+                                                                                                                ^^^^^^^
+ GET /dashboard/calendar 200 in 165ms (compile: 6ms, render: 159ms)
+ GET /dashboard/patients 200 in 193ms (compile: 6ms, render: 187ms)
+ POST /dashboard/patients 200 in 94ms (compile: 4ms, render: 90ms)
+ GET /dashboard/settings/availability 200 in 224ms (compile: 3ms, render: 220ms)
+Only plain objects can be passed to Client Components from Server Components. Decimal objects are not supported.
+  {id: ..., tenantId: ..., patientId: ..., startDateTime: ..., endDateTime: ..., status: ..., type: ..., price: Decimal, isPaid: ..., recurrenceId: ..., createdAt: ..., updatedAt: ..., patient: ..., note: ...}
+                                                                                                                ^^^^^^^
+ POST /dashboard/settings/availability 200 in 156ms (compile: 4ms, render: 152ms)
+ GET /dashboard/calendar 200 in 158ms (compile: 3ms, render: 155ms)
+Create Appointment Error: Error: Konflikt terminów dla daty 3/14/2026, 2:00:00 PM!
+    at <unknown> (app/actions/calendar.ts:126:25)
+    at async createAppointment (app/actions/calendar.ts:111:7)
+  124 |
+  125 |               if (conflicts.length > 0) {
+> 126 |                   throw new Error(`Konflikt terminów dla daty ${slot.start.toLocaleString()}!`);
+      |                         ^
+  127 |               }
+  128 |
+  129 |               await tx.appointment.create({
+ POST /dashboard/calendar 200 in 1006ms (compile: 4ms, render: 1003ms)
+ GET /dashboard/patients 200 in 240ms (compile: 12ms, render: 229ms)
+ POST /dashboard/patients 200 in 89ms (compile: 3ms, render: 85ms)
+ GET /dashboard/settings/availability 200 in 114ms (compile: 3ms, render: 111ms)
+Only plain objects can be passed to Client Components from Server Components. Decimal objects are not supported.
+  {id: ..., tenantId: ..., patientId: ..., startDateTime: ..., endDateTime: ..., status: ..., type: ..., price: Decimal, isPaid: ..., recurrenceId: ..., createdAt: ..., updatedAt: ..., patient: ..., note: ...}
+                                                                                                                ^^^^^^^
+ POST /dashboard/settings/availability 200 in 170ms (compile: 4ms, render: 166ms)
+ GET /dashboard/calendar 200 in 228ms (compile: 4ms, render: 224ms)
+Create Appointment Error: Error: Konflikt terminów dla daty 3/14/2026, 2:00:00 PM!
+    at <unknown> (app/actions/calendar.ts:126:25)
+    at async createAppointment (app/actions/calendar.ts:111:7)
+  124 |
+  125 |               if (conflicts.length > 0) {
+> 126 |                   throw new Error(`Konflikt terminów dla daty ${slot.start.toLocaleString()}!`);
+      |                         ^
+  127 |               }
+  128 |
+  129 |               await tx.appointment.create({
+ POST /dashboard/calendar 200 in 629ms (compile: 5ms, render: 624ms)
+ GET /dashboard/patients 200 in 160ms (compile: 4ms, render: 155ms)
+ GET /dashboard/patients 200 in 190ms (compile: 8ms, render: 181ms)
