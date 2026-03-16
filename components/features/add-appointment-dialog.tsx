@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { createAppointment } from "@/app/actions/calendar";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Plus } from "lucide-react";
+import { Plus, Loader2 } from "lucide-react";
 import { Patient } from "@prisma/client";
 
 interface AddAppointmentDialogProps {
@@ -178,6 +178,7 @@ export function AddAppointmentDialog({ patients }: AddAppointmentDialogProps) {
                     </div>
 
                     <Button type="submit" className="w-full" disabled={isPending}>
+                        {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                         {isPending ? "Zapisywanie..." : "Zapisz wizytę"}
                     </Button>
                 </form>
