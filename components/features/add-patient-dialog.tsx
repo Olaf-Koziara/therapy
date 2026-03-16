@@ -6,7 +6,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { createPatient } from "@/app/actions/patients";
-import { Plus } from "lucide-react";
+import { Plus, Loader2 } from "lucide-react";
 
 export function AddPatientDialog() {
     const [open, setOpen] = useState(false);
@@ -109,6 +109,7 @@ export function AddPatientDialog() {
                     </div>
 
                     <Button type="submit" className="w-full" disabled={isPending}>
+                        {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                         {isPending ? "Zapisywanie..." : "Zapisz"}
                     </Button>
                 </form>

@@ -14,8 +14,8 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { createPatient } from "@/app/actions/patients";
-import { useState, useTransition } from "react";
-import { useRouter } from "next/navigation";
+import { useTransition } from "react";
+import { Loader2 } from "lucide-react";
 
 export function PatientForm({ onSuccess }: { onSuccess?: () => void }) {
   const [isPending, startTransition] = useTransition();
@@ -29,8 +29,6 @@ export function PatientForm({ onSuccess }: { onSuccess?: () => void }) {
       guardianName: "",
     },
   });
-
-  const router = useRouter();
 
   function onSubmit(values: PatientFormValues) {
     startTransition(async () => {
@@ -114,6 +112,7 @@ export function PatientForm({ onSuccess }: { onSuccess?: () => void }) {
           )}
         />
         <Button type="submit" disabled={isPending}>
+          {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
           {isPending ? "Zapisywanie..." : "Dodaj Pacjenta"}
         </Button>
       </form>
