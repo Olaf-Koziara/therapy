@@ -1,0 +1,5 @@
+## 2024-05-19 - Interactive Elements Should Be Buttons
+
+**Learning:** Interactive UI elements that act as triggers (e.g., calendar appointment slots, status toggle pills) should be implemented using semantic `<button type="button">` tags instead of `<div>` elements with `onClick` handlers. Using divs causes critical keyboard accessibility issues because they are not focusable by default and do not trigger on Enter or Space keys. Additionally, these custom buttons need visible focus styles (like `focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1`) so keyboard users know where they are.
+
+**Action:** Whenever creating a custom interactive component that doesn't navigate to a new page (like a toggle, slot, or accordion header), use a `<button>` tag and always apply proper focus styles for keyboard navigation.
