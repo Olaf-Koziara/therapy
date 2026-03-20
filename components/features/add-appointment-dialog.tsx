@@ -94,8 +94,9 @@ export function AddAppointmentDialog({ patients }: AddAppointmentDialogProps) {
 
                     <div className="grid grid-cols-2 gap-4">
                         <div>
-                            <Label>Data</Label>
+                            <Label htmlFor="date">Data</Label>
                             <Input
+                                id="date"
                                 type="date"
                                 value={formData.date}
                                 onChange={e => setFormData({...formData, date: e.target.value})}
@@ -103,8 +104,9 @@ export function AddAppointmentDialog({ patients }: AddAppointmentDialogProps) {
                             />
                         </div>
                         <div>
-                            <Label>Godzina</Label>
+                            <Label htmlFor="time">Godzina</Label>
                             <Input
+                                id="time"
                                 type="time"
                                 value={formData.time}
                                 onChange={e => setFormData({...formData, time: e.target.value})}
@@ -115,8 +117,9 @@ export function AddAppointmentDialog({ patients }: AddAppointmentDialogProps) {
 
                     <div className="grid grid-cols-2 gap-4">
                         <div>
-                            <Label>Czas trwania (min)</Label>
+                            <Label htmlFor="duration">Czas trwania (min)</Label>
                             <Input
+                                id="duration"
                                 type="number"
                                 value={formData.duration}
                                 onChange={e => setFormData({...formData, duration: e.target.value})}
@@ -124,8 +127,9 @@ export function AddAppointmentDialog({ patients }: AddAppointmentDialogProps) {
                             />
                         </div>
                         <div>
-                            <Label>Cena (PLN)</Label>
+                            <Label htmlFor="price">Cena (PLN)</Label>
                             <Input
+                                id="price"
                                 type="number"
                                 value={formData.price}
                                 onChange={e => setFormData({...formData, price: e.target.value})}
