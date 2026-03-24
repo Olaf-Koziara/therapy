@@ -6,7 +6,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { createPatient } from "@/app/actions/patients";
-import { Plus } from "lucide-react";
+import { Loader2, Plus } from "lucide-react";
 
 export function AddPatientDialog() {
     const [open, setOpen] = useState(false);
@@ -59,39 +59,39 @@ export function AddPatientDialog() {
 
                     <div className="grid grid-cols-2 gap-4">
                         <div>
-                            <Label>Imię</Label>
-                            <Input value={formData.firstName} onChange={e => setFormData({...formData, firstName: e.target.value})} required />
+                            <Label htmlFor="firstName">Imię</Label>
+                            <Input id="firstName" value={formData.firstName} onChange={e => setFormData({...formData, firstName: e.target.value})} required />
                         </div>
                         <div>
-                            <Label>Nazwisko</Label>
-                            <Input value={formData.lastName} onChange={e => setFormData({...formData, lastName: e.target.value})} required />
+                            <Label htmlFor="lastName">Nazwisko</Label>
+                            <Input id="lastName" value={formData.lastName} onChange={e => setFormData({...formData, lastName: e.target.value})} required />
                         </div>
                     </div>
 
                     <div>
-                        <Label>Telefon</Label>
-                        <Input value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})} required />
+                        <Label htmlFor="phone">Telefon</Label>
+                        <Input id="phone" value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})} required />
                     </div>
 
                     <div>
-                         <Label>Email (opcjonalnie)</Label>
-                         <Input type="email" value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})} />
+                         <Label htmlFor="email">Email (opcjonalnie)</Label>
+                         <Input id="email" type="email" value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})} />
                     </div>
 
                     <div className="grid grid-cols-2 gap-4">
                         <div>
-                            <Label>PESEL</Label>
-                            <Input value={formData.pesel} onChange={e => setFormData({...formData, pesel: e.target.value})} />
+                            <Label htmlFor="pesel">PESEL</Label>
+                            <Input id="pesel" value={formData.pesel} onChange={e => setFormData({...formData, pesel: e.target.value})} />
                         </div>
                         <div>
-                            <Label>Data Urodzenia</Label>
-                            <Input type="date" value={formData.birthDate} onChange={e => setFormData({...formData, birthDate: e.target.value})} />
+                            <Label htmlFor="birthDate">Data Urodzenia</Label>
+                            <Input id="birthDate" type="date" value={formData.birthDate} onChange={e => setFormData({...formData, birthDate: e.target.value})} />
                         </div>
                     </div>
 
                     <div>
-                         <Label>Imię opiekuna (dla dzieci)</Label>
-                         <Input value={formData.guardianName} onChange={e => setFormData({...formData, guardianName: e.target.value})} />
+                         <Label htmlFor="guardianName">Imię opiekuna (dla dzieci)</Label>
+                         <Input id="guardianName" value={formData.guardianName} onChange={e => setFormData({...formData, guardianName: e.target.value})} />
                     </div>
 
                     <div className="flex items-center space-x-2 border p-3 rounded bg-slate-50">
@@ -109,6 +109,7 @@ export function AddPatientDialog() {
                     </div>
 
                     <Button type="submit" className="w-full" disabled={isPending}>
+                        {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                         {isPending ? "Zapisywanie..." : "Zapisz"}
                     </Button>
                 </form>
