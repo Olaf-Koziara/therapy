@@ -114,7 +114,7 @@ export function NoteEditor({ noteId, initialContent = "", patientId, appointment
                 placeholder={placeholder || "Treść notatki..."}
                 className="min-h-[150px] font-mono text-sm"
             />
-            {error && <div className="text-sm text-red-500">{error}</div>}
+            {error && <div role="alert" className="text-sm text-red-500">{error}</div>}
             <div className="flex justify-end">
                 <Button onClick={handleSave} disabled={isPending || !content.trim()}>
                     {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
