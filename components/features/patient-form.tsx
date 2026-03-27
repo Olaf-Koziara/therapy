@@ -14,8 +14,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { createPatient } from "@/app/actions/patients";
-import { useState, useTransition } from "react";
-import { useRouter } from "next/navigation";
+import { useTransition } from "react";
 
 export function PatientForm({ onSuccess }: { onSuccess?: () => void }) {
   const [isPending, startTransition] = useTransition();
@@ -29,8 +28,6 @@ export function PatientForm({ onSuccess }: { onSuccess?: () => void }) {
       guardianName: "",
     },
   });
-
-  const router = useRouter();
 
   function onSubmit(values: PatientFormValues) {
     startTransition(async () => {
