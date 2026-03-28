@@ -1,0 +1,3 @@
+## 2024-03-28 - [Accessible Calendar Grid Items]
+**Learning:** Calendar grid items implemented as `<div>` elements with `onClick` handlers create significant accessibility barriers, preventing keyboard users from navigating to or interacting with appointments. Screen readers also fail to announce the purpose of these items clearly without appropriate roles or labels.
+**Action:** Always use semantic `<button>` elements for interactive calendar slots, apply explicit focus indicators (`focus-visible:ring`), and add comprehensive `aria-label` attributes that summarize the key details (e.g., patient name and time) for screen reader users.
