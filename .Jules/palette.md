@@ -1,0 +1,3 @@
+## 2024-03-29 - [Semantic Buttons for Custom Interactions]
+**Learning:** Custom interactive elements (like appointment calendar blocks or status toggles) previously used `<div>` tags with `onClick` handlers. This broke keyboard navigation and focus management, hiding core functionality from non-mouse users.
+**Action:** Always refactor clickable `<div>` elements into `<button type="button">` and apply necessary `focus-visible:` utility classes for a11y focus outlines to ensure proper keyboard accessibility.
