@@ -106,7 +106,7 @@ export function WeekView({ date, appointments: rawAppointments }: WeekViewProps)
                                                 {app.isPaid && <span className="text-[10px] text-green-700 font-extrabold">$</span>}
                                             </div>
                                             <div>{app.patient.lastName}</div>
-                                        </button>
+                                        </div>
                                     ))}
                                 </div>
                             );

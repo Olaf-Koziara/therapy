@@ -1,0 +1,3 @@
+## 2024-04-01 - [Interactive Grid Elements]
+**Learning:** Custom calendar grid items representing appointments were implemented as `div` elements with `onClick` handlers. This prevents screen readers from announcing them properly and breaks keyboard navigation (tabbing and enter-to-click).
+**Action:** When creating custom interactive blocks in layout grids (like calendars or Kanban boards), always use semantic `<button type="button">` tags. Combine `w-full text-left` utility classes to preserve layout alignment, include descriptive `aria-label` attributes to summarize the visual context (e.g., patient name and time), and ensure explicit `focus-visible:*` styles are applied to provide clear keyboard focus indicators.
