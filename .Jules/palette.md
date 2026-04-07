@@ -1,0 +1,3 @@
+## 2025-02-14 - Replace div with button for interactive elements
+**Learning:** Interactive custom view elements (e.g., calendar slots, toggles) are currently built using `<div>` with `onClick` handlers, which prevents keyboard navigation and screen reader accessibility.
+**Action:** When implementing interactive elements, strictly use semantic `<button type="button">` tags instead of `<div>` and apply clear focus styling (`focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring`) to provide proper keyboard focus indicators.

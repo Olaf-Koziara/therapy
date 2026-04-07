@@ -196,10 +196,15 @@ export function AppointmentDetailsDialog({ appointment, open, onOpenChange }: Ap
                                         </SelectContent>
                                     </Select>
                                 </div>
-                                <div className="flex items-center space-x-2 border p-1 px-3 rounded h-8 mt-6 cursor-pointer" onClick={() => handleQuickUpdate(undefined, !isPaid)}>
+                                <button
+                                    type="button"
+                                    onClick={() => handleQuickUpdate(undefined, !isPaid)}
+                                    aria-label={`Zmień status płatności. Obecny status: ${isPaid ? "Opłacona" : "Nieopłacona"}`}
+                                    className="flex items-center space-x-2 border p-1 px-3 rounded h-8 mt-6 cursor-pointer hover:bg-slate-50 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                                >
                                      <div className={`w-3 h-3 rounded-full ${isPaid ? "bg-green-500" : "bg-red-500"}`} />
                                      <span className="text-sm">{isPaid ? "Opłacona" : "Nieopłacona"}</span>
-                                </div>
+                                </button>
                             </div>
                         </>
                     )}
