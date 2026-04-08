@@ -1,0 +1,3 @@
+## 2025-01-20 - Interactive Elements Accessibility
+**Learning:** Interactive custom UI elements (such as calendar slots and toggle pills) are occasionally built using generic `<div>` tags equipped with `onClick` handlers. These elements lack native keyboard support, semantic roles, and visible focus indicators, creating significant barriers for accessibility and screen reader users.
+**Action:** Always refactor interactive `<div>` elements into semantic `<button type="button">` elements. Incorporate `focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring` classes to ensure they provide clear visual feedback upon keyboard focus and integrate smoothly into the document tab order.
