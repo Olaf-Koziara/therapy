@@ -1,0 +1,6 @@
+## 2026-04-09 - [Interactive calendar items]
+**Learning:** Interactive list items/grids that previously used `<div>` with `onClick` handlers severely impact accessibility. Keyboard users cannot access them, and screen readers do not announce them as interactive.
+**Action:** Always refactor these custom interactive view elements to semantic `<button>` tags with `type="button"`, apply `w-full text-left` to maintain existing grid layout behavior, add focus styling (e.g. `focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring`), and attach an `aria-label` for screen readers.
+## 2026-04-09 - [Accessible nested aria-labels]
+**Learning:** Adding an `aria-label` to a parent element (e.g. `<button>`) causes screen readers to completely ignore the text and `aria-label` attributes of its child elements. For example, placing `aria-label="Opłacona"` on a child `<span>` within a button that already has an `aria-label` will hide the payment status from screen reader users.
+**Action:** When a parent element requires a comprehensive `aria-label`, concatenate all necessary state information (like payment status) directly into the parent's `aria-label` string, and use `aria-hidden="true"` on the decorative child elements (like icons or symbols).
