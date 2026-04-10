@@ -1,0 +1,3 @@
+## 2025-01-20 - Replace interactive `<div>` with semantic `<button>`
+**Learning:** Found multiple instances where `<div>` elements were used as interactive components (like appointment items or payment toggles) using `onClick` handlers. This breaks keyboard accessibility and screen reader support, as `<div>` elements do not inherently receive focus or trigger on Enter/Space.
+**Action:** Always use semantic `<button type="button">` tags for custom interactive elements. When replacing, ensure you add `w-full text-left` to preserve layout if replacing a block element, and add explicit focus indicators like `focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring` so keyboard users can see where they are.
