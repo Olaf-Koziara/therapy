@@ -1,0 +1,4 @@
+
+## 2024-05-18 - [Accessibility: Interactive Divs as Toggles]
+**Learning:** Using `<div>` elements with `onClick` handlers for toggle switches (like payment status) causes multiple accessibility issues: they lack keyboard focus (`tabindex`), lack semantic meaning (`role`), don't communicate state (`aria-checked`), and cannot be easily disabled during pending states. Also, when adding an `aria-label` to a parent button/switch, screen readers will read the label and ignore the child content, so it's best practice to add `aria-hidden="true"` to children that are visual indicators.
+**Action:** When creating custom toggles or interactive elements, always use `<button type="button" role="switch">`. Add `aria-checked`, a comprehensive `aria-label`, keyboard focus styles (`focus-visible:ring-2`), and ensure it handles `disabled` states appropriately. Hide decorative children from screen readers using `aria-hidden="true"`.
