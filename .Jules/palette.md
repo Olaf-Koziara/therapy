@@ -1,0 +1,3 @@
+## 2025-04-12 - Semantic Buttons for Interactive Elements
+**Learning:** Interactive elements like status toggles (e.g. payment status) were built using `<div>` with `onClick` handlers. This breaks keyboard accessibility and hides semantics from screen readers. Further, adding an `aria-label` to a parent element causes screen readers to completely ignore its child elements' attributes, meaning all state information must be in the parent's `aria-label` and children must be `aria-hidden="true"`.
+**Action:** Always refactor interactive `<div>` elements into semantic `<button type="button">` tags. Apply `focus-visible` outline styling for keyboard focus indicators, concatenate state into the button's `aria-label`, and hide decorative children with `aria-hidden="true"`.
