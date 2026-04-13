@@ -26,7 +26,7 @@ export async function getAppointments(start: Date, end: Date) {
     }
   });
 
-  return appointments.map(app => {
+  return appointments.map((app: any) => {
       let decryptedNote = null;
       if (app.note) {
           try {
@@ -108,7 +108,7 @@ export async function createAppointment(data: CreateAppointmentData) {
   const recurrenceId = data.recurrence ? crypto.randomUUID() : null;
 
   try {
-      await db.$transaction(async (tx) => {
+      await db.$transaction(async (tx: any) => {
           for (const slot of appointmentsToCreate) {
              const conflicts = await tx.appointment.findMany({
                 where: {
