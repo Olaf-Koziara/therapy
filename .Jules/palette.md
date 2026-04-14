@@ -1,0 +1,3 @@
+## 2026-04-14 - [Interactive Toggles]
+**Learning:** When implementing custom toggle controls like payment status switches, do not use generic `<div>` elements with `onClick` handlers as they are inaccessible to keyboard users and screen readers. Generic `<button>` tags without ARIA attributes can also be insufficient to communicate binary state.
+**Action:** Always use a semantic `<button type="button">`, add `role="switch"` combined with `aria-checked={boolean}` to properly communicate binary state to screen readers. Add `focus-visible` utility classes to ensure a clear keyboard focus ring, and use `aria-hidden="true"` on purely decorative child elements like color dots.
