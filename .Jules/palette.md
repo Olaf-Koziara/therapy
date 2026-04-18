@@ -1,0 +1,3 @@
+## 2024-06-25 - Semantic Custom Toggles and Buttons
+**Learning:** Interactive custom view elements like status toggles or calendar appointment blocks should never use `<div>` with `onClick`. Using `<div>` removes keyboard accessibility, making the app hard to navigate for users with disabilities. Toggles must use `<button role="switch">` with `aria-checked`, and clickable items must be semantic buttons, alongside clear focus outlines (`focus-visible:ring-2`).
+**Action:** When refactoring clickable interactive items lacking native keyboard support, replace `<div>` with `<button type="button">` and apply visible focus rings (e.g., `focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring`). For toggles, ensure `role="switch"` and `aria-checked` are present.
