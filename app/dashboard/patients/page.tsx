@@ -39,7 +39,7 @@ export default async function PatientsPage() {
                     </TableCell>
                 </TableRow>
             ) : (
-                patients.map((patient) => (
+                patients.map((patient: any) => (
                 <TableRow key={patient.id}>
                     <TableCell className="font-medium">
                         {patient.lastName} {patient.firstName}
