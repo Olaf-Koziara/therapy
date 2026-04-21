@@ -86,26 +86,39 @@ export function WeekView({ date, appointments: rawAppointments }: WeekViewProps)
 
                             return (
                                 <div key={day.toISOString()} className="border-r last:border-r-0 p-1 relative">
-                                    {dayApps.map(app => (
-                                        <div
-                                            key={app.id}
-                                            onClick={() => setSelectedAppointment(app)}
-                                            className={cn(
-                                                "text-xs p-1 rounded mb-1 border-l-4 truncate cursor-pointer hover:opacity-80 transition-opacity",
-                                                app.status === 'COMPLETED' ? "bg-green-100 text-green-800 border-green-500" :
-                                                app.status === 'CANCELLED' ? "bg-red-100 text-red-800 border-red-500 opacity-60" :
-                                                app.status === 'NO_SHOW' ? "bg-gray-200 text-gray-600 border-gray-500" :
-                                                "bg-blue-100 text-blue-700 border-blue-500"
-                                            )}
-                                            title={`${format(app.startDateTime, 'HH:mm')} - ${app.patient.lastName}`}
-                                        >
-                                            <div className="font-bold flex justify-between">
-                                                <span>{format(app.startDateTime, 'HH:mm')}</span>
-                                                {app.isPaid && <span className="text-[10px] text-green-700 font-extrabold">$</span>}
-                                            </div>
-                                            <div>{app.patient.lastName}</div>
-                                        </div>
-                                    ))}
+                                    {dayApps.map(app => {
+                                        const timeStr = format(app.startDateTime, 'HH:mm');
+                                        const statusStr = app.status === 'COMPLETED' ? 'Odbyta' :
+                                                          app.status === 'CANCELLED' ? 'Odwołana' :
+                                                          app.status === 'NO_SHOW' ? 'Nieobecność' : 'Zaplanowana';
+                                        const paymentStr = app.isPaid ? 'Opłacona' : 'Nieopłacona';
+                                        const ariaLabel = `Wizyta: ${timeStr}, Pacjent: ${app.patient.lastName}, Status: ${statusStr}, Płatność: ${paymentStr}`;
+
+                                        return (
+                                            <button
+                                                key={app.id}
+                                                type="button"
+                                                onClick={() => setSelectedAppointment(app)}
+                                                aria-label={ariaLabel}
+                                                className={cn(
+                                                    "w-full text-left text-xs p-1 rounded mb-1 border-l-4 truncate cursor-pointer hover:opacity-80 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1",
+                                                    app.status === 'COMPLETED' ? "bg-green-100 text-green-800 border-green-500" :
+                                                    app.status === 'CANCELLED' ? "bg-red-100 text-red-800 border-red-500 opacity-60" :
+                                                    app.status === 'NO_SHOW' ? "bg-gray-200 text-gray-600 border-gray-500" :
+                                                    "bg-blue-100 text-blue-700 border-blue-500"
+                                                )}
+                                                title={`${timeStr} - ${app.patient.lastName}`}
+                                            >
+                                                <div aria-hidden="true">
+                                                    <div className="font-bold flex justify-between">
+                                                        <span>{timeStr}</span>
+                                                        {app.isPaid && <span className="text-[10px] text-green-700 font-extrabold">$</span>}
+                                                    </div>
+                                                    <div>{app.patient.lastName}</div>
+                                                </div>
+                                            </button>
+                                        );
+                                    })}
                                 </div>
                             );
                         })}

@@ -1,0 +1,4 @@
+
+## 2024-04-21 - Accessible Custom Calendar Slots
+**Learning:** When building complex interactive UI elements like calendar appointment slots, using generic `<div>` tags with `onClick` handlers completely hides the element from screen readers and prevents keyboard navigation. Wrapping the entire block in a semantic `<button type="button">` resolves keyboard accessibility. Furthermore, to provide a clean screen reader experience, it is better to construct a single comprehensive `aria-label` on the parent button (e.g., "Wizyta: 08:00, Pacjent: Doe, Status: Zaplanowana, Płatność: Opłacona") and apply `aria-hidden="true"` to the inner decorative HTML structure.
+**Action:** When implementing clickable complex views, always wrap them in semantic buttons, synthesize the visual state into a concise `aria-label`, hide the visual HTML from screen readers, and add clear `focus-visible` ring styling for keyboard users.
