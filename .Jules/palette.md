@@ -1,0 +1,3 @@
+## 2024-04-28 - Semantic Toggles
+**Learning:** Custom interactive elements representing a boolean state (like a "Paid/Unpaid" toggle switch) MUST be built using a `<button type="button" role="switch">` rather than a generic `<div>` with an `onClick` handler. This provides standard keyboard focusability, whereas `<div>` elements require manual `tabIndex` and keydown handlers.
+**Action:** When implementing custom toggle views, always apply `role="switch"` and bind `aria-checked={state}`. Consolidate context into the parent's `aria-label` and hide decorative children with `aria-hidden="true"`. Finally, apply explicit focus styling (`focus-visible:ring-2`) to guarantee visibility during keyboard navigation.
