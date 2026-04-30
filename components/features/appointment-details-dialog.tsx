@@ -196,10 +196,17 @@ export function AppointmentDetailsDialog({ appointment, open, onOpenChange }: Ap
                                         </SelectContent>
                                     </Select>
                                 </div>
-                                <div className="flex items-center space-x-2 border p-1 px-3 rounded h-8 mt-6 cursor-pointer" onClick={() => handleQuickUpdate(undefined, !isPaid)}>
-                                     <div className={`w-3 h-3 rounded-full ${isPaid ? "bg-green-500" : "bg-red-500"}`} />
-                                     <span className="text-sm">{isPaid ? "Opłacona" : "Nieopłacona"}</span>
-                                </div>
+                                <button
+                                    type="button"
+                                    role="switch"
+                                    aria-checked={isPaid}
+                                    aria-label={`Przełącz status płatności: ${isPaid ? 'Opłacona' : 'Nieopłacona'}`}
+                                    className="flex items-center space-x-2 border p-1 px-3 rounded h-8 mt-6 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                                    onClick={() => handleQuickUpdate(undefined, !isPaid)}
+                                >
+                                     <div aria-hidden="true" className={`w-3 h-3 rounded-full ${isPaid ? "bg-green-500" : "bg-red-500"}`} />
+                                     <span aria-hidden="true" className="text-sm">{isPaid ? "Opłacona" : "Nieopłacona"}</span>
+                                </button>
                             </div>
                         </>
                     )}
