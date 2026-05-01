@@ -1,0 +1,3 @@
+## 2024-05-18 - Semantic Toggles for Better Accessibility
+**Learning:** In interactive view elements functioning as binary toggles (e.g., payment status), using a `<div>` with `onClick` is inaccessible for keyboard navigation and screen readers.
+**Action:** Always refactor to semantic `<button type="button" role="switch">` elements with `aria-checked={boolean}`. Combine necessary state information into a parent `aria-label` string, apply `aria-hidden="true"` to child decorative elements, and apply focus styling (`focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring`) to provide clear visual cues for keyboard users.
